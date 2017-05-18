@@ -36,6 +36,8 @@ public class Main {
             List<Token> lexems = WktLexer.parse(wellKnownTest);
 
             lexems.forEach(System.out::println);
+            
+            // EDIT HERE
 
         }
 
@@ -49,6 +51,8 @@ public class Main {
 
             lexems.forEach(System.out::println);
 
+            // EDIT HERE
+            
         }
 
     }
