@@ -16,6 +16,8 @@
  */
 package eu.ensg.compiler;
 
+import eu.ensg.data.GeometryCollection;
+import eu.ensg.data.Point;
 import java.util.List;
 
 /**
@@ -37,8 +39,10 @@ public class Main {
 
             lexems.forEach(System.out::println);
             
-            // EDIT HERE
+            Point p = WktParser.parsePoint(lexems);
+            System.out.println(p);
 
+            System.out.println(p.toWkt());
         }
 
         System.out.println("");
@@ -51,8 +55,10 @@ public class Main {
 
             lexems.forEach(System.out::println);
 
-            // EDIT HERE
+            GeometryCollection c = WktParser.parseGeometryCollection(lexems);
+            System.out.println(c);
             
+            System.out.println(c.toWkt());
         }
 
     }

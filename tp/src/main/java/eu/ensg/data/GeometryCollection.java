@@ -55,4 +55,25 @@ public class GeometryCollection extends Geometry {
         return "GeometryCollection{" + "children=" + children + '}';
     }
 
+    /**
+     * To well known text<br>
+     * Gives the WKT representation of the geometry
+     *
+     * @return the WKT representation
+     */
+    @Override
+    public String toWkt() {
+        String wkt = "";
+        for (Geometry child : children) {
+            if (!wkt.equals("")) {
+                wkt += ", ";
+            }
+            // depth first search
+            wkt += child.toWkt();
+        }
+        wkt = "GEOMETRYCOLLECTION (" + wkt + ")";
+
+        return wkt;
+    }
+
 }

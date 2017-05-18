@@ -22,4 +22,6 @@ package eu.ensg.data;
  */
 public abstract class Geometry {
     
+    public abstract String toWkt();
+    
 }

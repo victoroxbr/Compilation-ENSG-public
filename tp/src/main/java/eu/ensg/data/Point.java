@@ -54,4 +54,15 @@ public class Point extends Geometry {
         return "Point{" + "coord=" + coord + '}';
     }
 
+    /**
+     * To well known text<br>
+     * Gives the WKT representation of the geometry
+     *
+     * @return the WKT representation
+     */
+    @Override
+    public String toWkt() {
+        return "POINT (" + coord.toWkt() + ")";
+    }
+
 }

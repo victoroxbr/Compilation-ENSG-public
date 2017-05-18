@@ -68,4 +68,13 @@ public class XYCoord {
         return "PointCoord{" + "x=" + x + ", y=" + y + '}';
     }
 
+    /**
+     * To well known text<br>
+     * Gives the WKT representation of the geometry
+     *
+     * @return the WKT representation
+     */
+    public String toWkt() {
+        return x + " " + y;
+    }
 }
