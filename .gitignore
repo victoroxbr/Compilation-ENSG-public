@@ -42,3 +42,7 @@ hs_err_pid*
 # Directories left from old Ant project
 /build/
 /nbproject/private/
+
+#Algoid special
+/img/
+/current.al
