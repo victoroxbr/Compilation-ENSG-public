@@ -73,22 +73,25 @@ public class GofComposite {
 
     public static void main(String[] args) {
         Composite root = new Composite("root");
-        
+
         Leaf node1 = new Leaf("Level 1, node 1");
         root.add(node1);
 
         Composite node2 = new Composite("Level 1, node 2");
         root.add(node2);
-        
+
         Leaf node3 = new Leaf("Level 2, node 1");
         node2.add(node3);
-        
-        Leaf node4 = new Leaf("Level 2, node 2");
+
+        Composite node4 = new Composite("Level 2, node 2");
         node2.add(node4);
 
-        Leaf node5 = new Leaf("Level 1, node 2");
-        root.add(node5);
-        
+        Leaf node5 = new Leaf("Level 3, node 1");
+        node4.add(node5);
+
+        Leaf node6 = new Leaf("Level 3, node 2");
+        node4.add(node6);
+
         root.operation();
     }
 

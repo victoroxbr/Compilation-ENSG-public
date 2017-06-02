@@ -6,10 +6,9 @@
 package javaexamples;
 
 import fr.cyann.graphr.Graphr;
-import fr.cyann.graphr.StyleBuilder;
 import fr.cyann.graphr.TreeGraph;
 import static fr.cyann.graphr.declarative.Formula.*;
-import javaexamples.utils.UiUtils;
+import static javaexamples.utils.UiUtils.*;
 
 /**
  *
@@ -17,18 +16,24 @@ import javaexamples.utils.UiUtils;
  */
 public class GofCompositeGraphr {
 
-    public static void main(String[] args) {
-        StyleBuilder.Style style = new StyleBuilder().buildStyle();
-        Graphr graph = new Graphr("Graph'r", style);
+    public static void main(String[] args) throws InterruptedException {
+
+        Graphr graph = BuildPanel();
 
         TreeGraph tree = new TreeGraph(number(0), number(0), frameW(), frameH());
         graph.addGraph(tree);
+
         TreeGraph.TreeNode root = tree.createRootNode("Root");
         tree.createChildNode(root, "1-1");
-        TreeGraph.TreeNode node2 = tree.createChildNode(root, "1-2");
-        tree.createChildNode(node2, "2-1");
 
-        UiUtils.DisplayPanel(graph);
+        TreeGraph.TreeNode node2 = tree.createChildNode(root, "1-2");
+
+        tree.createChildNode(node2, "2-1");
+        TreeGraph.TreeNode node4 = tree.createChildNode(node2, "2-2");
+
+        tree.createChildNode(node4, "3-1");
+        tree.createChildNode(node4, "3-2");
+
     }
 
 }
