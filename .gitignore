@@ -46,3 +46,5 @@ hs_err_pid*
 #Algoid special
 /Algoid/img/
 current.al
+/java/JavaExamples/nbproject/private/
+/java/JavaExamples/build/
