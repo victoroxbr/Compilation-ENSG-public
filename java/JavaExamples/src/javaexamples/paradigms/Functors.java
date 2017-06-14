@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package javaexamples.functional;
+package javaexamples.paradigms;
 
 import java.util.Arrays;
 import java.util.List;
