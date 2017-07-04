@@ -49,3 +49,6 @@ current.al
 /java/JavaExamples/nbproject/private/
 /java/JavaExamples/build/
 /java/POC_ByteBuddy/build/
+/java/CalculatorBCEL/build/
+/java/ByteCodeCalculator/build/
+/java/POC_ASM/build/
