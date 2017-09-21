@@ -15,7 +15,9 @@ import eu.ensg.compilers.ast.Print;
 import eu.ensg.compilers.ast.Substration;
 import eu.ensg.compilers.ast.Visitor;
 import eu.ensg.compilers.utils.ByteClassLoader;
-import eu.ensg.compilers.utils.RessourcesCounter;
+import eu.ensg.compilers.utils.LocalManager;
+import eu.ensg.compilers.utils.OpcodeViewer;
+import eu.ensg.compilers.utils.StackManager;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
@@ -31,21 +33,21 @@ public class Calculator {
     private static class ASMVisitor implements Visitor {
 
         private final MethodVisitor mv;
-        private final RessourcesCounter stack;
-        private final RessourcesCounter local;
+        private final StackManager stack;
+        private final LocalManager local;
 
         public int getMaxStack() {
             return stack.getMax();
         }
 
         public int getMaxLocalVariable() {
-            return local.getMax();
+            return local.getNext();
         }
 
         public ASMVisitor(MethodVisitor mv, int initialStack, int initialLocal) {
             this.mv = mv;
-            this.stack = new RessourcesCounter(initialStack);
-            this.local = new RessourcesCounter(initialLocal);
+            this.stack = new StackManager(initialStack);
+            this.local = new LocalManager(initialLocal);
         }
 
         @Override
@@ -53,11 +55,8 @@ public class Calculator {
             ast.getRight().visite();
             ast.getLeft().visite();
 
-            mv.visitVarInsn(ILOAD, local.decrement().getValue()); // récupère left
-            mv.visitVarInsn(ILOAD, local.decrement().getValue()); // récupère right
             mv.visitInsn(IADD); // addition
-            mv.visitVarInsn(ISTORE, local.getValue());
-            local.increment();
+            stack.decrement();
         }
 
         @Override
@@ -65,11 +64,8 @@ public class Calculator {
             ast.getRight().visite();
             ast.getLeft().visite();
 
-            mv.visitVarInsn(ILOAD, local.decrement().getValue()); // récupère left
-            mv.visitVarInsn(ILOAD, local.decrement().getValue()); // récupère right
             mv.visitInsn(ISUB); // soustraction
-            mv.visitVarInsn(ISTORE, local.getValue());
-            local.increment();
+            stack.decrement();
         }
 
         @Override
@@ -77,11 +73,8 @@ public class Calculator {
             ast.getRight().visite();
             ast.getLeft().visite();
 
-            mv.visitVarInsn(ILOAD, local.decrement().getValue()); // récupère left
-            mv.visitVarInsn(ILOAD, local.decrement().getValue()); // récupère right
             mv.visitInsn(IMUL); // multiplication
-            mv.visitVarInsn(ISTORE, local.getValue());
-            local.increment();
+            stack.decrement();
         }
 
         @Override
@@ -89,31 +82,21 @@ public class Calculator {
             ast.getRight().visite();
             ast.getLeft().visite();
 
-            mv.visitVarInsn(ILOAD, local.decrement().getValue()); // récupère left
-            mv.visitVarInsn(ILOAD, local.decrement().getValue()); // récupère right
             mv.visitInsn(IDIV); // division
-            mv.visitVarInsn(ISTORE, local.getValue());
-            local.increment();
+            stack.decrement();
         }
 
         @Override
         public void visite(Minus ast) {
             ast.getLeft().visite();
 
-            mv.visitVarInsn(ILOAD, local.decrement().getValue()); // récupère left
             mv.visitInsn(INEG); // négation
-            mv.visitVarInsn(ISTORE, local.getValue());
-            local.increment();
         }
 
         @Override
         public void visite(Number ast) {
             stack.increment();
             mv.visitIntInsn(BIPUSH, ast.getValue());
-
-            stack.decrement();
-            mv.visitVarInsn(ISTORE, local.getValue());
-            local.increment();
         }
 
         @Override
@@ -121,7 +104,6 @@ public class Calculator {
             stack.increment();
             mv.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
             ast.getExpression().visite();
-            mv.visitVarInsn(ILOAD, local.decrement().getValue());
             mv.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(I)V", false);
             stack.decrement();
         }
@@ -130,7 +112,9 @@ public class Calculator {
     public static void main(String[] args) {
 
         // build ast
+        // print -2 + (7 - 3) = -6
         Ast ast = new Print(new Addition(new Minus(new Number(2)), new Substration(new Number(7), new Number(3))));
+        //Ast ast = new Print(new Addition(new Number(2), new Number(2)));
         ASMVisitor astVisitor;
 
         ClassWriter cw = new ClassWriter(0);
@@ -154,7 +138,7 @@ public class Calculator {
             mv.visitLabel(l0);
 
             // compile through ast
-            astVisitor = new ASMVisitor(mv, 1, 1);
+            astVisitor = new ASMVisitor(mv, 0, 1);
             ast.accept(astVisitor);
             ast.visite();
 
@@ -162,15 +146,14 @@ public class Calculator {
             Label l1 = new Label();
             mv.visitLabel(l1);
             mv.visitLocalVariable("args", "[Ljava/lang/String;", null, l0, l1, 0);
-            mv.visitMaxs(astVisitor.getMaxStack(), astVisitor.getMaxLocalVariable() + 1);
+            mv.visitMaxs(astVisitor.getMaxStack(), astVisitor.getMaxLocalVariable());
             mv.visitEnd();
         }
         cw.visitEnd();
 
-        System.out.println("max stack: " + astVisitor.getMaxStack());
-        System.out.println("max local variable: " + astVisitor.getMaxLocalVariable());
-
         ByteClassLoader.ExecuteByteCode("asm.Calculator", cw.toByteArray());
+
+        OpcodeViewer.print(cw.toByteArray());
     }
 
 }

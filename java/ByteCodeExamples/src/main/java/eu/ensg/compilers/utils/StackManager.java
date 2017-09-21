@@ -9,31 +9,31 @@ package eu.ensg.compilers.utils;
  *
  * @author cyann
  */
-public class RessourcesCounter {
+public class StackManager {
 
-    private int value;
+    private int size;
     private int max;
 
-    public RessourcesCounter(int value) {
-        this.value = value;
-        this.max = value;
+    public StackManager(int initialSize) {
+        this.size = initialSize;
+        this.max = initialSize;
     }
 
-    public RessourcesCounter increment() {
-        value++;
-        if (max < value) {
-            max = value;
+    public StackManager increment() {
+        size++;
+        if (max < size) {
+            max = size;
         }
         return this;
     }
 
-    public RessourcesCounter decrement() {
-        value--;
+    public StackManager decrement() {
+        size--;
         return this;
     }
 
-    public int getValue() {
-        return value;
+    public int getSize() {
+        return size;
     }
 
     public int getMax() {

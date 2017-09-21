@@ -1,10 +1,13 @@
 package eu.ensg.compilers.bcel;
 
 import eu.ensg.compilers.utils.ByteClassLoader;
+import eu.ensg.compilers.utils.OpcodeViewer;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import org.apache.bcel.Const;
+import org.apache.bcel.Repository;
 import org.apache.bcel.classfile.Code;
+import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.classfile.Method;
 import org.apache.bcel.generic.ArrayType;
 import org.apache.bcel.generic.ClassGen;
@@ -32,14 +35,14 @@ public class HelloWorld {
      */
     public static void main(String[] args) throws IllegalArgumentException, ClassNotFoundException, IOException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
 
-        ClassGen cg = new ClassGen("Calculator", "java.lang.Object", "",
+        ClassGen cg = new ClassGen("Hello", "java.lang.Object", "",
           Const.ACC_PUBLIC | Const.ACC_SUPER, null);
 
         InstructionFactory f = new InstructionFactory(cg);
         InstructionList il = new InstructionList();
 
         MethodGen mg = new MethodGen(Const.ACC_STATIC | Const.ACC_PUBLIC, Type.VOID, new Type[]{new ArrayType(Type.STRING, 1)},
-          new String[]{"argv"}, "main", "Calculator", il, cg.getConstantPool());
+          new String[]{"argv"}, "main", "Hello", il, cg.getConstantPool());
 
         il.append(f.createPrintln("Hello World"));
         il.append(InstructionFactory.createReturn(Type.VOID));
@@ -54,7 +57,10 @@ public class HelloWorld {
 
         // execute
         byte[] bytes = cg.getJavaClass().getBytes();
-        Class<?> loadClass = new ByteClassLoader().loadClass("Calculator", bytes);
+        ByteClassLoader byteClassLoader = new ByteClassLoader();
+        Class<?> loadClass = byteClassLoader.loadClass("Hello", bytes);
         loadClass.getMethod("main", String[].class).invoke(null, new Object[]{new String[]{""}});
+
+        OpcodeViewer.print(cg.getJavaClass().getBytes());
     }
 }
