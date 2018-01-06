@@ -15,5 +15,6 @@ while (!stack.isEmpty()) {
 	}
 	
 	node.setColor(algo.color.CYAN);
+	accept(node); // ACCEPT
 	
 }

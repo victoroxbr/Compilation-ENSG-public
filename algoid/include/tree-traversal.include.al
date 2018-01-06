@@ -28,3 +28,7 @@ set pops = function (stack) {
 	gStack.popLast();
 	return stack.pop();
 }
+
+set accept = function (node) {
+	util.log(node)
+}
