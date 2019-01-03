@@ -112,8 +112,8 @@ public class Calculator {
     public static void main(String[] args) {
 
         // build ast
-        // print -2 + (7 - 3) = -6
-        Ast ast = new Print(new Addition(new Minus(new Number(2)), new Substration(new Number(7), new Number(3))));
+        // print -8 + (7 - 3) = -4
+        Ast ast = new Print(new Addition(new Minus(new Number(8)), new Substration(new Number(7), new Number(3))));
         //Ast ast = new Print(new Addition(new Number(2), new Number(2)));
         ASMVisitor astVisitor;
 

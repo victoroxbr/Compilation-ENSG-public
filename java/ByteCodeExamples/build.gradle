@@ -11,7 +11,7 @@ sourceCompatibility = '1.8'
 // prefer. In this case NetBeans will not add these tasks but you may rely on
 // your own implementation.
 if (!hasProperty('mainClass')) {
-    ext.mainClass = 'eu.ensg.compilers.asm.Calculator'
+    ext.mainClass = 'eu.ensg.compilers.bcel.Calculator'
 }
 
 repositories {
@@ -26,6 +26,6 @@ dependencies {
     // You can read more about how to add dependency here:
     //   http://www.gradle.org/docs/current/userguide/dependency_management.html#sec:how_to_declare_your_dependencies
     testCompile group: 'junit', name: 'junit', version: '4.10'
-    compile group: 'org.apache.bcel', name: 'bcel', version: '6.0'
+    compile group: 'org.apache.bcel', name: 'bcel', version: '6.2'
     compile group: 'org.ow2.asm', name: 'asm-all', version: '5.2'
 }

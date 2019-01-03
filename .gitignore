@@ -53,3 +53,6 @@ current.al
 /java/ByteCodeCalculator/build/
 /java/POC_ASM/build/
 /java/GaselLoader/build/
+
+#tp special
+*.class
