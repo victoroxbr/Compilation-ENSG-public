@@ -5,7 +5,6 @@
  */
 package Demo_Languages;
 
-import com.sun.javafx.scene.control.skin.VirtualFlow;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,49 +15,52 @@ import java.util.List;
 public class Lexer {
 
     static List<Token> tokens = new ArrayList<>();
-    
-        // Num = [0-9]
-    static boolean testNum(Source s) {
-        if (!s.hasNext()) return false;
-        return "0123456789".contains(s.current() + "");
+
+    // Num = [0-9]
+    static boolean testCharIn(Source s, String chars) {
+        if (!s.hasNext()) {
+            return false;
+        }
+        return chars.contains(s.current() + "");
     }
-    
+
     // Dot = '.'
     static boolean testChar(Source s, char c) {
-        if (!s.hasNext()) return false;
+        if (!s.hasNext()) {
+            return false;
+        }
         return s.current() == c;
     }
-    
+
     // Nums = Num+
     static boolean parseNums(Source s) {
-        if (!testNum(s)) return false;
+        if (!testCharIn(s, "0123456789")) {
+            return false;
+        }
         do {
             s.next();
-        } while (testNum(s));
+        } while (testCharIn(s, "0123456789"));
         return true;
     }
-    
+
     // Number = Nums ( '.' Nums )?
     static boolean parseNumber(Source s) {
-        if (!parseNums(s)) return false;
+        if (!parseNums(s)) {
+            return false;
+        }
         if (testChar(s, '.')) {
             s.next();
             parseNums(s);
         }
-        
+
         // Production
         tokens.add(new Token(s.consumeWord(), LexemType.NUMBER));
         return true;
     }
-    
-    // Symbol = '+' | '-' | ....
+
+    // Symbol = '+' | '-' | '*' | '/' | '(' | ')'
     static boolean parseSymbol(Source s) {
-        if (testChar(s, '+')) {
-            s.next();
-            tokens.add(new Token(s.consumeWord(), LexemType.SYMBOL));
-            return true;
-        }
-        if (testChar(s, '-')) {
+        if (testCharIn(s, "+-/*()")) {
             s.next();
             tokens.add(new Token(s.consumeWord(), LexemType.SYMBOL));
             return true;
@@ -66,7 +68,7 @@ public class Lexer {
 
         return false;
     }
-    
+
     // Null = ' ' | '\t' | '\r' | '\n'
     static void removeNull(Source s) {
         while (s.hasNext() && " \t\r\n".contains(s.current() + "")) {
@@ -74,32 +76,23 @@ public class Lexer {
             s.consumeWord();
         }
     }
-    
+
     // Expr = Number Symbol Number
-    static boolean ParseExpr(Source s) {
-        
+    public static List<Token> ParseExpr(Source s) {
+
         while (s.hasNext()) {
-            
+
             removeNull(s);
-            
+
             parseNumber(s);
-            
+
             parseSymbol(s);
-            
+
         }
-        
-        return true;
+
+        removeNull(s);
+
+        return tokens;
     }
-    
-    public static void main(String[] args) {
-        Source s = new Source("5 4.5 + + 7.8");
-        
-        ParseExpr(s);
-        
-        tokens.forEach(System.out::println);
-        
-    }
-    
-    
-    // (45 84)
+
 }

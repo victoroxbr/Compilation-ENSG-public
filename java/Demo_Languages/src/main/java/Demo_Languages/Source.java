@@ -9,7 +9,7 @@ package Demo_Languages;
  *
  * @author Yann Caron
  */
-class Source {
+public class Source {
     
     private final String src;
     private int cursor = 0;
