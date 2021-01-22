@@ -18,6 +18,14 @@ public class Token {
         this.word = word;
         this.type = type;
     }
+    
+    public String getWord() {
+		return word;
+	}
+    
+    public LexemType getType() {
+		return type;
+	}
 
     @Override
     public String toString() {
