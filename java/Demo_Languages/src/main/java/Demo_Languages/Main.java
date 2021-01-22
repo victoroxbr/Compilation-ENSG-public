@@ -5,8 +5,8 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
 
-    	// Result = 20
-        Source s = new Source("    2 * 7 + 8 / 2 + 2");
+    	// Result = 17.0
+        Source s = new Source("           2 * (7 + 8) / 2 + 2");
 
         List<Token> tokens = Lexer.ParseExpr(s);
 
