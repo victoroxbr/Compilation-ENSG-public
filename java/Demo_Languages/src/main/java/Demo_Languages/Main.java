@@ -5,13 +5,14 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
 
-    	// Result = 5
-        Source s = new Source("    2 * 7 -5 + 8 / 2 + 2-10 ");
+    	// Result = 20
+        Source s = new Source("    2 * 7 + 8 / 2 + 2");
 
         List<Token> tokens = Lexer.ParseExpr(s);
 
         tokens.forEach(System.out::println);
-        
-        System.out.println(Parser.E(tokens));
+        Parser parser = new Parser(tokens);
+        parser.E();
+        System.out.println(parser.getResult());
     }
 }
