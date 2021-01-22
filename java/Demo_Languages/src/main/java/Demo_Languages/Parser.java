@@ -35,9 +35,9 @@ public class Parser {
 				} else if("-".contains(lexems.get(cursorLexems).getWord())) {
 					cursorLexems++;
 					E();
-					float secondTerme = stack.pop();
-					float firstTerme = stack.pop();
-					stack.add(firstTerme - secondTerme);
+					float second = stack.pop();
+					float first= stack.pop();
+					stack.add(first - second);
 				}
 			}
 		}
