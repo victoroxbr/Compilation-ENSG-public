@@ -26,18 +26,17 @@ public class Parser {
 		if(cursorLexems < lexems.size()) {
 			T();
 			if(cursorLexems < lexems.size()) {
-				if("+".contains(lexems.get(cursorLexems).getWord())) {
+				while(cursorLexems < lexems.size() && "+-".contains(lexems.get(cursorLexems).getWord())) {
+					String signe = lexems.get(cursorLexems).getWord();
 					cursorLexems++;
-					E();
+					T();
 					float second = stack.pop();
 					float first = stack.pop();
-					stack.add(first + second);
-				} else if("-".contains(lexems.get(cursorLexems).getWord())) {
-					cursorLexems++;
-					E();
-					float second = stack.pop();
-					float first= stack.pop();
-					stack.add(first - second);
+					if(signe.equals("+")) {
+						stack.add(first + second);
+					} else {
+						stack.add(first - second);
+					}
 				}
 			}
 		}
@@ -49,18 +48,18 @@ public class Parser {
 		if(cursorLexems < lexems.size()) {
 			F();
 			if(cursorLexems < lexems.size()) {
-				if("*".contains(lexems.get(cursorLexems).getWord())) {
+				while(cursorLexems < lexems.size() && "*/".contains(lexems.get(cursorLexems).getWord())) {
+					String signe = lexems.get(cursorLexems).getWord();
 					cursorLexems++;
-					T();
+					F();
 					float second = stack.pop();
 					float first = stack.pop();
-					stack.add(first * second);
-				} else if("/".contains(lexems.get(cursorLexems).getWord())) {
-					cursorLexems++;
-					T();
-					float second = stack.pop();
-					float first = stack.pop();
-					stack.add(first / second);
+					if(signe.equals("*")) {
+						stack.add(first * second);
+					} else {
+						stack.add(first / second);
+					}
+					
 				}
 			}
 		}
